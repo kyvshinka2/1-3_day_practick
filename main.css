@@ -1,0 +1,13 @@
+.main {
+    height: 50vh;
+    width: auto;
+}
+
+table th td {
+    width: 150px;
+}
+
+.block-table {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+    <link rel="stylesheet" href="./main.css">]
+    <!-- <-- ссылка --> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+    <script src="./main.js"></script>
+</head>
+<body>
+     <header class="text-center py-4">
+        <h1>Практическая №1 "Данные для диаграмм"</h1>
+      </header>
+      
+      <div class="block-table">
+        <table>
+          <tr>
+            <td width="300px"><b>33</b></td>
+            <td width="300px"><b>16</b></td>
+            <td width="300px"><b>32.1</b></td>
+            <td width="300px"><b>4.7</b></td>
+          </tr>
+          <tr>
+            <td width="300px">Всего сотрудников</td>
+            <td width="300px">Руководителей</td>
+            <td width="300px">Возраст Средн.</td>
+            <td width="300px">Время работы Средн.</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- диаграмма возрастов -->
+      <div id="main" style="width: 800px;height:400px;"></div>
+
+      <!-- диаграмма возрастов -->
+    <script type="text/javascript">
+      // Initialize the echarts instance based on the prepared dom
+      var myChart = echarts.init(document.getElementById('main'));
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        title: {
+          text: 'Возраст отрудников'
+        },
+        tooltip: {},
+        legend: {
+          data: ['sales']
+        },
+        xAxis: {
+          data: ['18-20', '20-22', '22-24', '24-26', '26-28', '28-30', '30-35', '35-40', '40-45', '45-50', '50-55', '>50']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'sales',
+            type: 'bar',
+            data: [1, 2, 2, 2, 4, 12, 5, 2, 2, 1]
+          }
+        ]
+      };
+
+      // Display the chart using the configuration items and data just specified.
+      myChart.setOption(option);
+    </script>
+
+    <!-- подсчет возрастов -->
+    <div class="resultResept2" id="resultResept2">
+      <ol class="resultResept2"></ol>
+    </div>
+    <script>
+      let API = document.querySelector('.todoApi'); 
+twenty = 0; 
+twentyfive = 0;  
+thirty = 0;
+thirtyfive = 0;
+forty = 0;
+fortyfive = 0;
+fifty = 0;
+girl = 0; 
+boy = 0;  
+
+fetch('http://localhost:4444/api/v1/company/employees')  
+.then(response => response.json()) 
+.then(api => {
+  
+/*определяем возраст*/   
+for (let i = 0; i < 40; i++) {
+let item = document.createElement('p'); 
+age = api[i].birthdate;
+gender = api[i].gender;
+checkage = ((new Date().getTime() - new Date(age)) / (24 * 3600 * 365.25 * 1000)) | 0;
+
+/*считаем сколько в каждой группе людей*/
+if (checkage <= 20) {
+twenty = twenty + 1;
+} else if (checkage <= 25) {
+twentyfive = twentyfive + 1;
+} else if (checkage <= 30) {
+thirty = thirty + 1;
+} else if (checkage <= 35) {
+thirtyfive = thirtyfive + 1;
+} else if (checkage <= 40) {
+forty = forty + 1;
+} else if (checkage <= 45) {
+fortyfive = fortyfive + 1;
+} else if (checkage <= 50) {
+fifty = fifty + 1;
+}
+}});
+    </script>
+
+
+
+    <!-- мужчины, женщины -->
+    <div id="main-2" style="width: 800px;height:400px;"></div>
+
+    <script type="text/javascript">
+      // Initialize the echarts instance based on the prepared dom
+      var myChart = echarts.init(document.getElementById('main-2'));
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        title: {
+          text: 'Возраст отрудников'
+        },
+        tooltip: {},
+        legend: {
+          data: ['sales']
+        },
+        xAxis: {
+          data: ['Мужской', 'Женский']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: 'sales',
+            type: 'bar',
+            data: [17, {
+          value: 16,
+          itemStyle: {
+            color: 'pink'
+          }
+        },]
+          }
+        ]
+      };
+
+      // Display the chart using the configuration items and data just specified.
+      myChart.setOption(option);
+
+    </script>
+
+<div class="row" id="resipe">
+  <ol class="resultResept"></ol>
+</div>
+<script>
+  let vavodAPI = document.querySelector('.resultResept');
+
+fetch('http://localhost:4444/api/v1/company/employees')
+.then(response => response.json())
+.then(api => {
+
+  for (let i = 0; i < 100; i++) {
+    
+  }
+})
+</script>
+
+</body>
+</html>
