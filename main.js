@@ -1,46 +1,73 @@
 /*переменные*/
 let API = document.querySelector('.todoApi'); 
-twenty = 0; 
-twentyfive = 0;  
-thirty = 0;
-thirtyfive = 0;
-forty = 0;
-fortyfive = 0;
-fifty = 0;
-girl = 0; 
-boy = 0;  
+let twenty = 0; 
+let twentyfive = 0;  
+let thirty = 0;
+let thirtyfive = 0;
+let forty = 0;
+let fortyfive = 0;
+let fifty = 0;
+let girl = 0; 
+let boy = 0;  
 
 /*api*/
-fetch('http://localhost:4444/api/v1/company/employees')  
+fetch('https://statistic-public.vercel.app/api/v1/company/employees')  
 .then(response => response.json()) 
 .then(api => {
   
 /*определяем возраст*/   
 for (let i = 0; i < 40; i++) {
 let item = document.createElement('p'); 
-age = api[i].birthdate;
-gender = api[i].gender;
+let age = api[i].birthdate;
+let gender = api[i].gender;
 checkage = ((new Date().getTime() - new Date(age)) / (24 * 3600 * 365.25 * 1000)) | 0;
+console.log(checkage);
 
 /*считаем сколько в каждой группе людей*/
-if (checkage <= 20) {twenty = twenty + 1;}
-else if (checkage <= 25) {twentyfive = twentyfive + 1;}
-else if (checkage <= 30) {thirty = thirty + 1;}
-else if (checkage <= 35) {thirtyfive = thirtyfive + 1;}
-else if (checkage <= 40) {forty = forty + 1;}
-else if (checkage <= 45) {fortyfive = fortyfive + 1;}
-else if (checkage <= 50) {fifty = fifty + 1;}
+if (checkage <= 20) {
+    twenty = twenty + 1;
+} else if (checkage <= 25) {
+    twentyfive = twentyfive + 1;
+} else if (checkage <= 30) {
+    thirty = thirty + 1;
+} else if (checkage <= 35) {
+    thirtyfive = thirtyfive + 1;
+} else if (checkage <= 40) {
+    forty = forty + 1;
+} else if (checkage <= 45) {
+    fortyfive = fortyfive + 1;
+} else if (checkage <= 50) {
+    fifty = fifty + 1;
+}
 
-/*определяем пол*/
-if( gender == "Женский") {girl = girl + 1;}
-else {boy = boy + 1;}
+console.log(twenty);
+console.log(twentyfive);
+console.log(thirty);
+console.log(thirtyfive);
+console.log(forty);
+console.log(fortyfive);
+console.log(fifty);
+
+
+// определяем пол
+if (gender == "Женский") {
+    girl = girl + 1;
+} else {
+    boy = boy + 1;
+}
+
+
 
 /*вводим полученные возраста в массив*/
 let massAge = [twenty, twentyfive, thirty, thirtyfive, forty, fortyfive, fifty];
-API.appendChild(item)
+API.appendChild(item);
+
 
 /*вывод диаграммы ВОЗРАСТ*/
-var myChart = echarts.init(document.getElementById('main'));
+var echarts = require('echarts');
+var myChart = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
 option = {
 // всплывающее окно при наведении
 tooltip: {
@@ -61,8 +88,12 @@ type: 'bar'
 }]};
 myChart.setOption(option);
 
+
 /*вывод диаграммы ПОЛ*/
-var myChart = echarts.init(document.getElementById('gender'));
+var echarts = require('echarts');
+var myChart = document.getElementById('gender');
+var myChart = echarts.init(chartDom);
+var option;
 option = {
 // всплывающее окно при наведении
 tooltip: {
@@ -82,4 +113,5 @@ data: [boy, {value: girl, itemStyle: {color: '#FF1493'}}],
 type: 'bar'
 }]};
 myChart.setOption(option);
+
 }});

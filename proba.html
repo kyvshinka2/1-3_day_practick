@@ -32,11 +32,141 @@
         </table>
       </div>
 
-      <div id="todoApi"></div>
-      
-     
-      <div id="gender" style="width: 800px;height:400px;">
-          
-      </div>
+      <div id="todoApi" class="todoApi"><p id="age"></p></div>
+      <!--Диаграмма-->
+<h1>Возраст сотрудников</h1>
+<div id="main" style="width: 800px; height: 500px;"></div>
+<script>
+  let chartDom = document.getElementById('main');
+  let myChart = echarts.init(chartDom, 'dark');
+
+// загрузка данных из API
+fetch('http://localhost:4444/api/v1/company/employees')
+  .then(res => res.json())
+  .then(data => {
+    // преобразование даты рождения в возраст
+    let ageData = data.map(employee => {
+      let birthdate = new Date(employee.birthdate);
+      let today = new Date();
+      let age = today.getFullYear() - birthdate.getFullYear();
+      if (today.getMonth() < birthdate.getMonth() ||
+         (today.getMonth() == birthdate.getMonth() && today.getDate() < birthdate.getDate())) {
+        age--;
+      }
+      return age;
+    });
+
+    // подготовка данных для диаграммы
+    let ageCategories = [
+        { name: '18-20', min: 18, max: 20 },
+        { name: '20-22', min: 20, max: 22 },
+        { name: '22-24', min: 22, max: 24 },
+        { name: '24-26', min: 24, max: 26 },
+        { name: '28-30', min: 28, max: 30 },
+        { name: '30-35', min: 30, max: 35 },
+        { name: '35-40', min: 35, max: 40 },
+        { name: '40-45', min: 40, max: 45 },
+        { name: '45-50', min: 45, max: 50 },
+        { name: '50-55', min: 50, max: 55 },
+        
+    ];
+
+    let seriesData = ageCategories.map(category => {
+  return ageData.filter(age => age >= category.min && age < category.max).length;
+});
+    // обновление опций графика
+    let option = {
+      backgroundColor: 'transparent',
+      title: {
+        padding: 10,
+        text: "Возраст сотрудников",
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: '#272b30',
+        textStyle: {
+          color: 'white'
+        }
+      },
+      xAxis: {
+        type: 'category',
+        data: ageCategories.map(category => category.name)
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          type: 'bar',
+          data: seriesData
+        }
+      ]
+    };
+
+    // установка опций для графика
+    myChart.setOption(option);
+  });
+</script>
+
+<!-- мужчины - женщины -->
+<div id="gender" style="width: 800px; height: 500px;"></div>
+<script>
+  let API = document.querySelector('.todoApi'); 
+  let girl = 0; 
+  let boy = 0; 
+
+  /*api*/
+fetch('https://statistic-public.vercel.app/api/v1/company/employees')  
+.then(response => response.json()) 
+.then(api => {
+  
+/*определяем возраст*/   
+for (let i = 0; i < 40; i++) {
+let item = document.createElement('p'); 
+let gender = api[i].gender;
+
+// определяем пол
+if (gender == "Женский") {
+    girl = girl + 1;
+} else {
+    boy = boy + 1;
+}
+
+/*вывод диаграммы ПОЛ*/
+var echarts = require('echarts');
+var myChart = document.getElementById('gender');
+var myChart = echarts.init(chartDom);
+var option;
+option = {
+// всплывающее окно при наведении
+tooltip: {
+trigger: 'axis',
+axisPointer: {
+type: 'shadow'
+},
+backgroundColor: '#ffffff',
+},   
+xAxis: {
+type: 'category',
+data: ['Мужской', 'Женский']
+},
+yAxis: {type: 'value'},
+series: [{
+data: [boy, {value: girl, itemStyle: {color: '#FF1493'}}],
+type: 'bar'
+}]};
+myChart.setOption(option);
+
+}});
+</script>
+
+
+<div class="ApiProect"><p id ="proect"></p></div>
+
+<h1>Проекты</h1>
+<div id="projects" style="width: 800px; height:500px;"></div>
+
+
 </body>
 </html>
